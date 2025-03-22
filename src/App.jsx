@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import TextInput from "./components/TextInput";
+import DiagramSelector from "./components/DiagramSelector";
+import DiagramRenderer from "./components/DiagramRenderer";
+import { Button } from "@/components/ui/button";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [inputText, setInputText] = useState("");
+  const [diagramType, setDiagramType] = useState("Data Flow Diagram");
+  const [diagramCode, setDiagramCode] = useState("");
+
+  const generateDiagram = () => {
+    let generatedCode = "";
+
+    if (diagramType === "Data Flow Diagram") {
+      generatedCode = `graph TD; Input-->Processing; Processing-->Output;`;
+    } else if (diagramType === "High-Level View") {
+      generatedCode = `graph TD; User-->System; System-->Database;`;
+    } else if (diagramType === "Low-Level View") {
+      generatedCode = `graph TD; CPU-->RAM; RAM-->Storage;`;
+    }
+
+    setDiagramCode(generatedCode);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Text to Diagram Converter</h1>
+      <TextInput inputText={inputText} setInputText={setInputText} />
+      <DiagramSelector diagramType={diagramType} setDiagramType={setDiagramType} />
+      <Button onClick={generateDiagram} className="mt-4">Generate Diagram</Button>
+      <DiagramRenderer diagramCode={diagramCode} />
+    </div>
+  );
 }
-
-export default App
